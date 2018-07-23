@@ -1,4 +1,4 @@
-
+//Importing libraries needed
 const express = require('express');
 const customerRoutes = express.Router();
 
@@ -34,6 +34,37 @@ customerRoutes.route('/').post(function(req, res){
         .catch(err => {
             res.status(400).send('Unable to save to database');
         });
+});
+
+// Update customer data
+customerRoutes.route('/:id').put(function(req, res){
+    Customer.findById(req.params.id, function(err, cus){
+        if(!cus){
+            return next(new Error('Could not load document'));
+        } else {
+            cus.name = req.body.name;
+            cus.address = req.body.address;
+            cus.phone_number = req.body.phone_number;
+
+            cus.save().then(data => {
+                res.status(200).json({'responseDesc':'Update customer successfully'});
+            })
+            .catch(err => {
+                res.status(404).send('Unable to udpate customer');
+            });
+        }
+    });
+});
+
+// Delete customer
+customerRoutes.route('/:id').delete(function(req, res){
+    Customer.findByIdAndRemove({_id: req.params.id}, function(err, cus){
+        if(err){
+            res.json(err);
+        } else {
+            res.status(200).json({'responseDesc':'Customer Deleted Successfully'});
+        }
+    });
 });
 
 module.exports = customerRoutes;

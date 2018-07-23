@@ -1,4 +1,4 @@
-// Importing the packages needed
+// Importing the libraries needed
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
