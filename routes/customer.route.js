@@ -9,9 +9,11 @@ let Customer = require('../models/customer');
 customerRoutes.route('/').get(function(req, res){
     Customer.find(function(err, cus){
         if(err){
-            console.log(err);
+          res.status(500).json({'responseDesc': err});
+        } else if(!cus) {
+            res.status(404).json({'responseDesc': 'Data Not Found'});
         } else {
-            res.json(cus);
+            res.status(200).json(cus);
         }
     });
 });
@@ -20,7 +22,14 @@ customerRoutes.route('/').get(function(req, res){
 customerRoutes.route('/:id').get(function(req, res){
     let id = req.params.id;
     Customer.findById(id, function(err, cus){
-        res.json(cus);
+        if(err){
+            res.status(500).json({'responseDesc':err});
+        }
+        else if(!cus){
+            res.status(404).json({'responseDesc':'Data Not Found'});
+        } else {
+            res.json(cus);
+        }
     });
 });
 
@@ -60,7 +69,7 @@ customerRoutes.route('/:id').put(function(req, res){
 customerRoutes.route('/:id').delete(function(req, res){
     Customer.findByIdAndRemove({_id: req.params.id}, function(err, cus){
         if(err){
-            res.json(err);
+            res.status(500).json({'responseDesc': err});
         } else {
             res.status(200).json({'responseDesc':'Customer Deleted Successfully'});
         }
