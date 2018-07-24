@@ -65,7 +65,7 @@ customerRoutes.route('/:id').put(function(req, res){
     });
 });
 
-// Delete customer
+// Delete customer data
 customerRoutes.route('/:id').delete(function(req, res){
     Customer.findByIdAndRemove({_id: req.params.id}, function(err, cus){
         if(err){
